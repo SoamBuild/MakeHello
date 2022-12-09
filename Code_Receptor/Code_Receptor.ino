@@ -1,5 +1,12 @@
 #include <ESP8266WiFi.h>
+#include<Adafruit_NeoPixel.h>
 #include <espnow.h>
+
+#define LED_PIN D2
+#define LED_COUNT 3
+
+Adafruit_NeoPixel strip(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
+
 
 typedef struct recep_msg
 {
@@ -26,9 +33,9 @@ void setup()
 {
 
   Serial.begin(115200);
-
-  pinMode(D3, OUTPUT);
-  digitalWrite(D3, LOW);
+ |strip.begin();           // INITIALIZE NeoPixel strip object (REQUIRED)
+  strip.show();            // Turn OFF all pixels ASAP
+  strip.setBrightness(50);
   myData.recep_alert =false;
 
   WiFi.mode(WIFI_STA);
