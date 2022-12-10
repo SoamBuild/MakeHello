@@ -66,16 +66,20 @@ void setup()
   // Receptores
   esp_now_add_peer(device1, ESP_NOW_ROLE_SLAVE, 1, NULL, 0);
   esp_now_add_peer(device2, ESP_NOW_ROLE_SLAVE, 1, NULL, 0);
+  onboot_Mode(0, 165, 0);
 }
 
 void loop()
 {
-
+  standby_Mode(2, 59, 100);
   uint8_t data = 0; // Read Bank_0_Reg_0x43/0x44 for gesture result.
   paj7620ReadReg(0x43, 1, &data);
   if (data == GES_RIGHT_FLAG)
   {
     Serial.println("RIGHT");
+    strip.fill(strip.Color(0, 0, 0), 4, 8);
+    strip.show();
+    delay(20);
     right_CHECK = true;
   }
 
@@ -88,8 +92,7 @@ void loop()
   {
     MakeHello();
   }
-  // Send message via ESP-NOW
-  // esp_now_send(device1, (uint8_t *)&myData, sizeof(myData));
+  
 }
 void MakeHello()
 {
@@ -107,15 +110,33 @@ void MakeGoodbye()
   esp_now_send(device1, (uint8_t *)&myData, sizeof(myData));
   esp_now_send(device2, (uint8_t *)&myData, sizeof(myData));
 }
-void onboot_Mode(int r, int g, int b){
-  for (int i = 0; i <= 3; i++)
+void standby_Mode(int r, int g, int b,int min,int max)
+{
+  for (int i = 40; i <= 80; i++)
+  {
+    strip.fill(strip.Color(r, g, b), 0, 8);
+    strip.setBrightness(i);
+    strip.show();
+    delay(20);
+  }
+  for (int i = 80; i >= 40; i--)
+  {
+    strip.fill(strip.Color(r, g, b), 0, 8);
+    strip.setBrightness(i);
+    strip.show();
+    delay(10);
+  }
+}
+void onboot_Mode(int r, int g, int b)
+{
+  for (int i = 0; i < 8; i++)
   {
     strip.setPixelColor(i, r, g, b);
     strip.show();
     delay(1000);
   }
   delay(100);
-  for (int i = 3; i >= 0; i--)
+  for (int i =8; i > 0; i--)
   {
     strip.setPixelColor(i, 0, 0, 0);
     strip.show();
