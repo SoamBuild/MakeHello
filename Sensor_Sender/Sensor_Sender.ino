@@ -71,15 +71,13 @@ void setup()
 
 void loop()
 {
- 
+
   uint8_t data = 0; // Read Bank_0_Reg_0x43/0x44 for gesture result.
   paj7620ReadReg(0x43, 1, &data);
   if (data == GES_RIGHT_FLAG)
   {
     Serial.println("RIGHT");
-   standby_Mode(2, 59, 100,4,8);
-   
-    delay(20);
+    standby_Mode(2, 59, 100, 4, 8);
     right_CHECK = true;
   }
 
@@ -87,20 +85,22 @@ void loop()
   {
     Serial.println("LEFT");
     left_CHECK = true;
-      standby_Mode(2, 59, 100,0,4);
+    standby_Mode(2, 59, 100, 0, 4);
   }
   if (right_CHECK == true && left_CHECK == true)
   {
     MakeHello();
   }
-  
 }
 void MakeHello()
 {
   myData.state = true;
+  colorWipe(80, 80, 80, 20);
   esp_now_send(device1, (uint8_t *)&myData, sizeof(myData));
   esp_now_send(device2, (uint8_t *)&myData, sizeof(myData));
   delay(10000);
+  strip.clear();
+  strip.show();
   MakeGoodbye();
 }
 void MakeGoodbye()
@@ -110,10 +110,9 @@ void MakeGoodbye()
   myData.state = false;
   esp_now_send(device1, (uint8_t *)&myData, sizeof(myData));
   esp_now_send(device2, (uint8_t *)&myData, sizeof(myData));
-  strip.clear();
-  strip.show();
+  
 }
-void standby_Mode(int r, int g, int b,int min,int max)
+void standby_Mode(int r, int g, int b, int min, int max)
 {
   for (int i = 40; i <= 80; i++)
   {
@@ -139,7 +138,7 @@ void onboot_Mode(int r, int g, int b)
     delay(1000);
   }
   delay(100);
-  for (int i =8; i > 0; i--)
+  for (int i = 8; i > 0; i--)
   {
     strip.setPixelColor(i, 0, 0, 0);
     strip.show();
@@ -147,4 +146,13 @@ void onboot_Mode(int r, int g, int b)
   }
   strip.show();
   strip.clear();
+}
+void colorWipe(int r, int g, int b, int wait)
+{
+  for (int i = 0; i < strip.numPixels(); i++)
+  {                                  // For each pixel in strip...
+    strip.setPixelColor(i, r, g, b); //  Set pixel's color (in RAM)
+    strip.show();                    //  Update strip to match
+    delay(wait);                     //  Pause for a moment
+  }
 }
