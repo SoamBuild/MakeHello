@@ -71,14 +71,14 @@ void setup()
 
 void loop()
 {
-  standby_Mode(2, 59, 100);
+ 
   uint8_t data = 0; // Read Bank_0_Reg_0x43/0x44 for gesture result.
   paj7620ReadReg(0x43, 1, &data);
   if (data == GES_RIGHT_FLAG)
   {
     Serial.println("RIGHT");
-    strip.fill(strip.Color(0, 0, 0), 4, 8);
-    strip.show();
+   standby_Mode(2, 59, 100,4,8);
+   
     delay(20);
     right_CHECK = true;
   }
@@ -87,6 +87,7 @@ void loop()
   {
     Serial.println("LEFT");
     left_CHECK = true;
+      standby_Mode(2, 59, 100,0,4);
   }
   if (right_CHECK == true && left_CHECK == true)
   {
@@ -109,19 +110,21 @@ void MakeGoodbye()
   myData.state = false;
   esp_now_send(device1, (uint8_t *)&myData, sizeof(myData));
   esp_now_send(device2, (uint8_t *)&myData, sizeof(myData));
+  strip.clear();
+  strip.show();
 }
 void standby_Mode(int r, int g, int b,int min,int max)
 {
   for (int i = 40; i <= 80; i++)
   {
-    strip.fill(strip.Color(r, g, b), 0, 8);
+    strip.fill(strip.Color(r, g, b), min, max);
     strip.setBrightness(i);
     strip.show();
     delay(20);
   }
   for (int i = 80; i >= 40; i--)
   {
-    strip.fill(strip.Color(r, g, b), 0, 8);
+    strip.fill(strip.Color(r, g, b), min, max);
     strip.setBrightness(i);
     strip.show();
     delay(10);
