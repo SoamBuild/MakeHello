@@ -107,3 +107,20 @@ void MakeGoodbye()
   esp_now_send(device1, (uint8_t *)&myData, sizeof(myData));
   esp_now_send(device2, (uint8_t *)&myData, sizeof(myData));
 }
+void onboot_Mode(int r, int g, int b){
+  for (int i = 0; i <= 3; i++)
+  {
+    strip.setPixelColor(i, r, g, b);
+    strip.show();
+    delay(1000);
+  }
+  delay(100);
+  for (int i = 3; i >= 0; i--)
+  {
+    strip.setPixelColor(i, 0, 0, 0);
+    strip.show();
+    delay(1000);
+  }
+  strip.show();
+  strip.clear();
+}
