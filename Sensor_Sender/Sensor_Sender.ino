@@ -95,7 +95,7 @@ void loop()
 void MakeHello()
 {
   myData.state = true;
-  colorWipe(80, 80, 80, 20);
+  alert_Mode(80, 80, 80, 20);
   esp_now_send(device1, (uint8_t *)&myData, sizeof(myData));
   esp_now_send(device2, (uint8_t *)&myData, sizeof(myData));
   delay(10000);
@@ -131,14 +131,14 @@ void standby_Mode(int r, int g, int b, int min, int max)
 }
 void onboot_Mode(int r, int g, int b)
 {
-  for (int i = 0; i < 8; i++)
+  for (int i = 0; i <= 8; i++)
   {
     strip.setPixelColor(i, r, g, b);
     strip.show();
     delay(1000);
   }
   delay(100);
-  for (int i = 8; i > 0; i--)
+  for (int i = 8; i >= 0; i--)
   {
     strip.setPixelColor(i, 0, 0, 0);
     strip.show();
@@ -147,8 +147,10 @@ void onboot_Mode(int r, int g, int b)
   strip.show();
   strip.clear();
 }
-void colorWipe(int r, int g, int b, int wait)
+void alert_Mode(int r, int g, int b, int wait)
 {
+  strip.show();
+  strip.clear();
   for (int i = 0; i < strip.numPixels(); i++)
   {                                  // For each pixel in strip...
     strip.setPixelColor(i, r, g, b); //  Set pixel's color (in RAM)
