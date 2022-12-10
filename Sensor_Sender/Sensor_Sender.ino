@@ -2,6 +2,12 @@
 #include <espnow.h>
 #include <Wire.h>
 #include "paj7620.h"
+#include <Adafruit_NeoPixel.h>
+
+#define LED_PIN D4
+#define LED_COUNT 8
+
+Adafruit_NeoPixel strip(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
 
 // MacXdevices
 uint8_t device1[] = {0x84, 0xCC, 0xA8, 0xA2, 0xF7, 0x33};
@@ -37,6 +43,9 @@ void setup()
   Serial.begin(115200);
   // Init Sensor Gesto
   paj7620Init();
+
+  strip.begin();
+  strip.show();
 
   WiFi.mode(WIFI_STA);
 
@@ -86,7 +95,7 @@ void MakeHello()
 {
   myData.state = true;
   esp_now_send(device1, (uint8_t *)&myData, sizeof(myData));
-   esp_now_send(device2, (uint8_t *)&myData, sizeof(myData));
+  esp_now_send(device2, (uint8_t *)&myData, sizeof(myData));
   delay(10000);
   MakeGoodbye();
 }
