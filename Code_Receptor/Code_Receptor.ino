@@ -1,12 +1,11 @@
 #include <ESP8266WiFi.h>
-#include<Adafruit_NeoPixel.h>
+#include <Adafruit_NeoPixel.h>
 #include <espnow.h>
 
-#define LED_PIN D2
+#define LED_PIN D3
 #define LED_COUNT 3
 
 Adafruit_NeoPixel strip(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
-
 
 typedef struct recep_msg
 {
@@ -33,10 +32,10 @@ void setup()
 {
 
   Serial.begin(115200);
- |strip.begin();           // INITIALIZE NeoPixel strip object (REQUIRED)
-  strip.show();            // Turn OFF all pixels ASAP
+  strip.begin();
+  strip.show();
   strip.setBrightness(50);
-  myData.recep_alert =false;
+  myData.recep_alert = false;
 
   WiFi.mode(WIFI_STA);
 
@@ -52,13 +51,30 @@ void setup()
 
 void loop()
 {
-  Serial.println(alert);
+  Serial.println(myData.recep_alert);
   if (myData.recep_alert == true)
   {
-    digitalWrite(D3, HIGH);
+    strip.fill(strip.Color(255, 0, 0), 0, 3);
   }
   else
   {
-    digitalWrite(D3, LOW);
+   standby_Mode(2,59,100);
+  }
+}
+void standby_Mode(int r, int g, int b)
+{
+  for (int i = 40; i <= 80; i++)
+  {
+    strip.fill(strip.Color(r, g, b), 0, 3);
+    strip.setBrightness(i);
+    strip.show();
+    delay(20);
+  }
+  for (int i = 80; i >= 40; i -= 1)
+  {
+    strip.fill(strip.Color(r, g, b), 0, 3);
+    strip.setBrightness(i);
+    strip.show();
+    delay(10);
   }
 }
