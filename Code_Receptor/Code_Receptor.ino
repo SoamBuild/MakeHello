@@ -47,6 +47,7 @@ void setup()
 
   esp_now_set_self_role(ESP_NOW_ROLE_SLAVE);
   esp_now_register_recv_cb(OnDataRecv);
+  
 }
 
 void loop()
@@ -54,11 +55,11 @@ void loop()
   Serial.println(myData.recep_alert);
   if (myData.recep_alert == true)
   {
-    strip.fill(strip.Color(255, 0, 0), 0, 3);
+    alert_Mode(127, 0, 0, 50);
   }
   else
   {
-   standby_Mode(2,59,100);
+    standby_Mode(2, 59, 100);
   }
 }
 void standby_Mode(int r, int g, int b)
@@ -70,11 +71,27 @@ void standby_Mode(int r, int g, int b)
     strip.show();
     delay(20);
   }
-  for (int i = 80; i >= 40; i -= 1)
+  for (int i = 80; i >= 40; i--)
   {
     strip.fill(strip.Color(r, g, b), 0, 3);
     strip.setBrightness(i);
     strip.show();
     delay(10);
+  }
+}
+void alert_Mode(int r, int g, int b, int wait)
+{
+  for (int a = 0; a < 10; a++)
+  {
+    for (int b = 0; b < 3; b++)
+    {
+      strip.clear();
+      for (int c = b; c < strip.numPixels(); c += 3)
+      {
+        strip.setPixelColor(c, r, g, b);
+      }
+      strip.show();
+      delay(wait);
+    }
   }
 }
