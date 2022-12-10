@@ -47,6 +47,7 @@ void setup()
 
   esp_now_set_self_role(ESP_NOW_ROLE_SLAVE);
   esp_now_register_recv_cb(OnDataRecv);
+  onboot_Mode(0,165,0);
   
 }
 
@@ -94,4 +95,21 @@ void alert_Mode(int r, int g, int b, int wait)
       delay(wait);
     }
   }
+}
+void onboot_Mode(int r, int g, int b){
+  for (int i = 0; i <= 3; i++)
+  {
+    strip.setPixelColor(i, r, g, b);
+    strip.show();
+    delay(1000);
+  }
+  delay(100);
+  for (int i = 3; i >= 0; i--)
+  {
+    strip.setPixelColor(i, 0, 0, 0);
+    strip.show();
+    delay(1000);
+  }
+  strip.show();
+  strip.clear();
 }
