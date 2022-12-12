@@ -65,6 +65,7 @@ void loop()
 }
 void standby_Mode(int r, int g, int b)
 {
+  analogWrite(D2,0);
   for (int i = 40; i <= 80; i++)
   {
     strip.fill(strip.Color(r, g, b), 0, 3);
@@ -82,6 +83,7 @@ void standby_Mode(int r, int g, int b)
 }
 void alert_Mode(int r, int g, int b, int wait)
 {
+  analogWrite(D2,200);
   for (int a = 0; a < 10; a++)
   {
     for (int b = 0; b < 3; b++)
