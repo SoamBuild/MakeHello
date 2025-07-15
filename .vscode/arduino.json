@@ -1,0 +1,5 @@
+{
+    "port": "COM6",
+    "board": "esp8266:esp8266:d1_mini_lite",
+    "sketch": "Code_Receptor\\Code_Receptor.ino"
+}
